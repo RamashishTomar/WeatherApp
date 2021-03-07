@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Text, View } from "react-native";
+import React from "react";
+import { connect } from "react-redux";
+import { View } from "react-native";
 
+import Loader from "./components/Loader";
 const Home = (props) => {
   return (
     <View>
-      <Loader loading={props.loading} />
+      <Loader loading={true} />
     </View>
   );
 };
