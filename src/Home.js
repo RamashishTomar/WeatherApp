@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 
-import { searchByCoordinates } from "./redux/Actions";
+import { searchByCoordinates, setError } from "./redux/Actions";
 import Loader from "./components/Loader";
 import Location from "./utils/Location";
 import { timeConverter } from "./utils/time";
@@ -24,11 +24,16 @@ const Home = (props) => {
 
   const getForecast = () => {
     Location.checkAndRequest()
-      .then(() => {
-        Location.getLocation().then(({ lat, lng }) => {
-          props.searchByCoordinates({ lat, lng });
-        });
-      })
+      .then(
+        () => {
+          Location.getLocation().then(({ lat, lng }) => {
+            props.searchByCoordinates({ lat, lng });
+          });
+        },
+        () => {
+          props.setError("Location Permission Denied");
+        }
+      )
       .catch(() => {});
   };
   getToday = (unixTimestamp) => {
@@ -270,6 +275,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     searchByCoordinates: (data) => searchByCoordinates(data, dispatch),
+    setError: (err) => setError(err, dispatch),
   };
 };
 
