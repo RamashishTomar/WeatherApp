@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, Text, StyleSheet, StatusBar } from "react-native";
 import { Provider } from "react-redux";
+import "react-native-reanimated";
 
 import configureStore from "./src/redux/ConfigureStore";
 import Home from "./src/Home";

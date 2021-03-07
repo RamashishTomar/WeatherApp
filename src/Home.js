@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { Text, View } from "react-native";
 
+import { searchByCoordinates } from "./redux/Actions";
 import Loader from "./components/Loader";
 import Location from "./utils/Location";
 const Home = (props) => {
@@ -13,7 +14,7 @@ const Home = (props) => {
     Location.checkAndRequest()
       .then(() => {
         Location.getLocation().then(({ lat, lng }) => {
-          console.log(lat, lng);
+          props.searchByCoordinates({ lat, lng });
         });
       })
       .catch(() => {});
@@ -21,9 +22,26 @@ const Home = (props) => {
 
   return (
     <View>
-      <Loader loading={true} />
+      <Loader loading={props.isloading} />
+      <Text>{JSON.stringify(props.forecast)}</Text>
+      <Text>{props.iserror}</Text>
     </View>
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    isloading: state.weather.loading,
+    iserror: state.weather.error,
+    current: state.weather.current,
+    forecast: state.weather.forecast,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    searchByCoordinates: (data) => searchByCoordinates(data, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

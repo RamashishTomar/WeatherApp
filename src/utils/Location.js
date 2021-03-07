@@ -1,11 +1,11 @@
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import Geolocation from 'react-native-geolocation-service';
-import {Platform} from 'react-native';
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
+import Geolocation from "react-native-geolocation-service";
+import { Platform } from "react-native";
 
 export default class Location {
   static checkAndRequest() {
     return new Promise((resolve, reject) => {
-      if (Platform.OS === 'ios') {
+      if (Platform.OS === "ios") {
         check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
           .then((result) => {
             switch (result) {
@@ -15,8 +15,8 @@ export default class Location {
 
               case RESULTS.DENIED:
                 request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, {
-                  title: 'Location needed to determine your location',
-                  message: 'We need the location to show wether forecast.',
+                  title: "Location needed to determine your location",
+                  message: "We need the location to show wether forecast.",
                 })
                   .then((result) => {
                     switch (result) {
@@ -60,8 +60,8 @@ export default class Location {
 
               case RESULTS.DENIED:
                 request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, {
-                  title: 'Location needed to determine your location',
-                  message: 'We need the location to show wether forecast.',
+                  title: "Location needed to determine your location",
+                  message: "We need the location to show wether forecast.",
                 })
                   .then((result) => {
                     switch (result) {
@@ -104,14 +104,14 @@ export default class Location {
       Geolocation.getCurrentPosition(
         (position) => {
           let {
-            coords: {latitude, longitude},
+            coords: { latitude, longitude },
           } = position;
           let lat = parseFloat(latitude.toFixed(6));
           let lng = parseFloat(longitude.toFixed(6));
-          resolve({lat, lng});
+          resolve({ lat, lng });
         },
         (error) => reject(error),
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
       );
     });
   }
